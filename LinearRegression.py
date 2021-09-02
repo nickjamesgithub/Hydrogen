@@ -19,8 +19,6 @@ data['Capacity'] = pd.to_numeric(data['Capacity'])
 data_remove = data.dropna()
 data_remove['log_capacity'] = np.log(data_remove['Capacity'])
 
-
-
 # Fit OLS model
 model_basic = smf.ols(formula='log_capacity ~ Continent + Tech + Year', data=data_remove)
 result = model_basic.fit()

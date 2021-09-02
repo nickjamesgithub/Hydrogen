@@ -9,42 +9,34 @@ data_remove = data.dropna()
 
 # Generate grid of years
 years = np.linspace(2000, 2028, 29)
-for i in range(len(years)):
 
-    # 5 year rolling Output
-    rolling_capacity = 4 # This is Python indexing
-    europe_list = []  # Average Capacity
-    for j in range(rolling_capacity, len(years)):
-        europe_capacity_5 = data_remove.loc[(data_remove['Year'] >= years[j-rolling_capacity]) &
-                                     (data_remove['Year'] <= years[j]) &
-                                     (data_remove['Continent'] == 'Europe'), 'Capacity']
-        east_asia_capacity_5 = data_remove.loc[(data_remove['Year'] >= years[j - rolling_capacity]) &
-                                            (data_remove['Year'] <= years[j]) &
-                                            (data_remove['Continent'] == 'East Asia'), 'Capacity']
-        north_america_capacity_5 = data_remove.loc[(data_remove['Year'] >= years[j - rolling_capacity]) &
-                                               (data_remove['Year'] <= years[j]) &
-                                               (data_remove['Continent'] == 'North America'), 'Capacity']
-        oceania_capacity_5 = data_remove.loc[(data_remove['Year'] >= years[j - rolling_capacity]) &
-                                                   (data_remove['Year'] <= years[j]) &
-                                                   (data_remove['Continent'] == 'Oceania'), 'Capacity']
-        south_america_capacity_5 = data_remove.loc[(data_remove['Year'] >= years[j - rolling_capacity]) &
-                                             (data_remove['Year'] <= years[j]) &
-                                             (data_remove['Continent'] == 'South America'), 'Capacity']
-        other_asia_capacity_5 = data_remove.loc[(data_remove['Year'] >= years[j - rolling_capacity]) &
-                                                   (data_remove['Year'] <= years[j]) &
-                                                   (data_remove['Continent'] == 'Other Asia'), 'Capacity']
+# Country lists
+europe_list = []
+east_asia_list = []
+north_america_list = []
+oceania_list = []
+south_america_list = []
+other_asia_list = []
+for j in range(len(years)):
+    # Europe
+    europe_capacity_yearly = data_remove.loc[(data_remove['Year'] == years[j]) & (data_remove['Continent'] == 'Europe'), 'Capacity'].sum()
+    europe_list.append(europe_capacity_yearly)
+    # East Asia
+    east_asia_capacity_yearly = data_remove.loc[(data_remove['Year'] == years[j]) & (data_remove['Continent'] == 'East Asia'), 'Capacity'].sum()
+    east_asia_list.append(east_asia_capacity_yearly)
+    # North America
+    north_america_capacity_yearly = data_remove.loc[(data_remove['Year'] == years[j]) & (data_remove['Continent'] == 'North America'), 'Capacity'].sum()
+    north_america_list.append(north_america_capacity_yearly)
+    # Oceania
+    oceania_capacity_yearly = data_remove.loc[(data_remove['Year'] == years[j]) & (data_remove['Continent'] == 'Oceania'), 'Capacity'].sum()
+    oceania_list.append(oceania_capacity_yearly)
+    # South America
+    south_america_capacity_yearly = data_remove.loc[(data_remove['Year'] == years[j]) & (data_remove['Continent'] == 'South America'), 'Capacity'].sum()
+    south_america_list.append(south_america_capacity_yearly)
+    # other Asia
+    other_asia_capacity_yearly = data_remove.loc[(data_remove['Year'] == years[j]) & (data_remove['Continent'] == 'Other Asia'), 'Capacity'].sum()
+    other_asia_list.append(other_asia_capacity_yearly)
 
-
-
-
-    # Slice a particular event
-    event_m = genders[0][(genders[0]["event"] == events_list_m[i])]
-    event_f = genders[1][(genders[1]["event"] == events_list_w[i])]
-
-    # Mean/event/year - men
-    means_m = [] # Average Male distance
-    for j in range(len(years)):
-        mean_year_event = event_m.loc[(event_m['Date'] == years[j]), 'Mark'].mean()
-        means_m.append(mean_year_event)
+block = 1
 
 
