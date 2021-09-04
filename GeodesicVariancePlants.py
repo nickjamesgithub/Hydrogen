@@ -5,15 +5,17 @@ from pyemd import emd, emd_with_flow
 from math import radians, cos, sin, asin, sqrt
 import matplotlib.pyplot as plt
 
+green = False
+
 # Read in dataset
 data = pd.read_csv("/Users/tassjames/Desktop/carbon_credits_research/hydrogen_research/Hydrogen_data.csv")
 data['Capacity'] = pd.to_numeric(data['Capacity'])
 data['Year'] = pd.to_numeric(data['Year'])
-data_remove = data.dropna()
+data_clean = data.dropna()
 
 # Remove fossil fuels from the data
-# green_data = data_remove[data_remove.Tech != "Fossil"]
-green_data = data_remove
+if green:
+    data_clean = data_clean[data_clean.Tech != "Fossil"]
 
 # Read in location data
 location = pd.read_excel("/Users/tassjames/Desktop/carbon_credits_research/hydrogen_research/latitude_longitude_continents_updated.xlsx")
@@ -50,14 +52,15 @@ for i in range(len(lats_array)):
 
 # Generate grid of years
 years = np.linspace(2000, 2024, 25)
+years_grid = np.linspace(2004, 2024, 21)
 geodesic_variance = []
 
 # 5 year rolling Output
 rolling_capacity = 4 # This is Python indexing
 europe_list = []  # Average Capacity
 for j in range(rolling_capacity, len(years)):
-    slice = green_data.loc[(green_data['Year'] >= years[j - rolling_capacity]) &
-                                        (green_data['Year'] <= years[j])]
+    slice = data_clean.loc[(data_clean['Year'] >= years[j - rolling_capacity]) &
+                                        (data_clean['Year'] <= years[j])]
     europe_green_counts = len(slice.loc[(slice['Continent'] == "Europe")])
     east_asia_green_counts = len(slice.loc[(slice['Continent'] == "East Asia")])
     north_america_green_counts = len(slice.loc[(slice['Continent'] == "North America")])
@@ -104,10 +107,21 @@ for j in range(rolling_capacity, len(years)):
     geodesic_variance.append(upper_distance_sum)
     print("Iteration " + str(j) + " / " + str(len(years)))
 
-# Time-varying geodesic variance
-plt.plot(geodesic_variance)
-plt.xlabel("Time")
-plt.ylabel("Geodesic Wasserstein all Number plans Variance")
-plt.title("Spatial variance")
-plt.savefig("Geodesic_variance_all_plants_variance")
-plt.show()
+if green:
+    # Time-varying geodesic variance
+    plt.plot(years_grid, geodesic_variance)
+    plt.xlabel("Time")
+    plt.ylabel("Geodesic Wasserstein Plants Variance")
+    plt.title("Spatial variance Green")
+    plt.locator_params(axis='x', nbins=5)
+    plt.savefig("Geodesic_variance_Plants_green")
+    plt.show()
+else:
+    # Time-varying geodesic variance
+    plt.plot(years_grid, geodesic_variance)
+    plt.xlabel("Time")
+    plt.ylabel("Geodesic Wasserstein Plants Variance")
+    plt.title("Spatial variance Fossil")
+    plt.locator_params(axis='x', nbins=5)
+    plt.savefig("Geodesic_variance_Plants_fossil")
+    plt.show()

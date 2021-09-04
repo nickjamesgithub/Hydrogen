@@ -5,17 +5,17 @@ from pyemd import emd, emd_with_flow
 from math import radians, cos, sin, asin, sqrt
 import matplotlib.pyplot as plt
 
-green = "yes"
+green = False
 
 # Read in dataset
 data = pd.read_csv("/Users/tassjames/Desktop/carbon_credits_research/hydrogen_research/Hydrogen_data.csv")
 data['Capacity'] = pd.to_numeric(data['Capacity'])
 data['Year'] = pd.to_numeric(data['Year'])
-data_remove = data.dropna()
+data_clean = data.dropna()
 
 # Remove fossil fuels from the data
 if green:
-    data_remove = data_remove[data_remove.Tech != "Fossil"]
+    data_clean = data_clean[data_clean.Tech != "Fossil"]
 
 # Read in location data
 location = pd.read_excel("/Users/tassjames/Desktop/carbon_credits_research/hydrogen_research/latitude_longitude_continents_updated.xlsx")
@@ -52,30 +52,31 @@ for i in range(len(lats_array)):
 
 # Generate grid of years
 years = np.linspace(2000, 2024, 25)
+years_grid = np.linspace(2004, 2024, 21)
 geodesic_variance = []
 
 # 5 year rolling Output
 rolling_capacity = 4 # This is Python indexing
 europe_list = []  # Average Capacity
 for j in range(rolling_capacity, len(years)):
-    europe_capacity_5 = data_remove.loc[(data_remove['Year'] >= years[j - rolling_capacity]) &
-                                        (data_remove['Year'] <= years[j]) &
-                                        (data_remove['Continent'] == 'Europe'), 'Capacity'].sum()
-    east_asia_capacity_5 = data_remove.loc[(data_remove['Year'] >= years[j - rolling_capacity]) &
-                                           (data_remove['Year'] <= years[j]) &
-                                           (data_remove['Continent'] == 'East Asia'), 'Capacity'].sum()
-    north_america_capacity_5 = data_remove.loc[(data_remove['Year'] >= years[j - rolling_capacity]) &
-                                               (data_remove['Year'] <= years[j]) &
-                                               (data_remove['Continent'] == 'North America'), 'Capacity'].sum()
-    oceania_capacity_5 = data_remove.loc[(data_remove['Year'] >= years[j - rolling_capacity]) &
-                                         (data_remove['Year'] <= years[j]) &
-                                         (data_remove['Continent'] == 'Oceania'), 'Capacity'].sum()
-    south_america_capacity_5 = data_remove.loc[(data_remove['Year'] >= years[j - rolling_capacity]) &
-                                               (data_remove['Year'] <= years[j]) &
-                                               (data_remove['Continent'] == 'South America'), 'Capacity'].sum()
-    other_asia_capacity_5 = data_remove.loc[(data_remove['Year'] >= years[j - rolling_capacity]) &
-                                            (data_remove['Year'] <= years[j]) &
-                                            (data_remove['Continent'] == 'Other Asia'), 'Capacity'].sum()
+    europe_capacity_5 = data_clean.loc[(data_clean['Year'] >= years[j - rolling_capacity]) &
+                                        (data_clean['Year'] <= years[j]) &
+                                        (data_clean['Continent'] == 'Europe'), 'Capacity'].sum()
+    east_asia_capacity_5 = data_clean.loc[(data_clean['Year'] >= years[j - rolling_capacity]) &
+                                           (data_clean['Year'] <= years[j]) &
+                                           (data_clean['Continent'] == 'East Asia'), 'Capacity'].sum()
+    north_america_capacity_5 = data_clean.loc[(data_clean['Year'] >= years[j - rolling_capacity]) &
+                                               (data_clean['Year'] <= years[j]) &
+                                               (data_clean['Continent'] == 'North America'), 'Capacity'].sum()
+    oceania_capacity_5 = data_clean.loc[(data_clean['Year'] >= years[j - rolling_capacity]) &
+                                         (data_clean['Year'] <= years[j]) &
+                                         (data_clean['Continent'] == 'Oceania'), 'Capacity'].sum()
+    south_america_capacity_5 = data_clean.loc[(data_clean['Year'] >= years[j - rolling_capacity]) &
+                                               (data_clean['Year'] <= years[j]) &
+                                               (data_clean['Continent'] == 'South America'), 'Capacity'].sum()
+    other_asia_capacity_5 = data_clean.loc[(data_clean['Year'] >= years[j - rolling_capacity]) &
+                                            (data_clean['Year'] <= years[j]) &
+                                            (data_clean['Continent'] == 'Other Asia'), 'Capacity'].sum()
     # Total Capacity
     total = europe_capacity_5 + east_asia_capacity_5 + north_america_capacity_5 \
             + oceania_capacity_5 + south_america_capacity_5 + other_asia_capacity_5
@@ -115,10 +116,21 @@ for j in range(rolling_capacity, len(years)):
     geodesic_variance.append(upper_distance_sum)
     print("Iteration " + str(j) + " / " + str(len(years)))
 
-# Time-varying geodesic variance
-plt.plot(geodesic_variance)
-plt.xlabel("Time")
-plt.ylabel("Geodesic Wasserstein Capacity Variance")
-plt.title("Spatial variance")
-plt.savefig("Geodesic_green_variance_capacity_variance")
-plt.show()
+if green:
+    # Time-varying geodesic variance
+    plt.plot(years_grid, geodesic_variance)
+    plt.xlabel("Time")
+    plt.ylabel("Geodesic Wasserstein Capacity Variance")
+    plt.title("Spatial variance Green")
+    plt.locator_params(axis='x', nbins=5)
+    plt.savefig("Geodesic_variance_Capacity_green")
+    plt.show()
+else:
+    # Time-varying geodesic variance
+    plt.plot(years_grid, geodesic_variance)
+    plt.xlabel("Time")
+    plt.ylabel("Geodesic Wasserstein Capacity Variance")
+    plt.title("Spatial variance Fossil")
+    plt.locator_params(axis='x', nbins=5)
+    plt.savefig("Geodesic_variance_Capacity_fossil")
+    plt.show()
