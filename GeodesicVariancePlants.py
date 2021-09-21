@@ -11,7 +11,8 @@ green = False
 data = pd.read_csv("/Users/tassjames/Desktop/carbon_credits_research/hydrogen_research/Hydrogen_data.csv")
 data['Capacity'] = pd.to_numeric(data['Capacity'])
 data['Year'] = pd.to_numeric(data['Year'])
-data_clean = data.dropna()
+data_clean = data
+# data_clean = data.dropna()
 
 # Remove fossil fuels from the data
 if green:
@@ -114,7 +115,7 @@ if green:
     plt.ylabel("Geodesic Wasserstein Plants Variance")
     plt.title("Spatial variance Green")
     plt.locator_params(axis='x', nbins=5)
-    plt.savefig("Geodesic_variance_Plants_green")
+    plt.savefig("Geodesic_variance_Plants_green_full")
     plt.show()
 else:
     # Time-varying geodesic variance
@@ -123,5 +124,5 @@ else:
     plt.ylabel("Geodesic Wasserstein Plants Variance")
     plt.title("Spatial variance Fossil")
     plt.locator_params(axis='x', nbins=5)
-    plt.savefig("Geodesic_variance_Plants_fossil")
+    plt.savefig("Geodesic_variance_Plants_fossil_full")
     plt.show()

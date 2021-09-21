@@ -5,13 +5,14 @@ from pyemd import emd, emd_with_flow
 from math import radians, cos, sin, asin, sqrt
 import matplotlib.pyplot as plt
 
-green = False
+green = True
 
 # Read in dataset
 data = pd.read_csv("/Users/tassjames/Desktop/carbon_credits_research/hydrogen_research/Hydrogen_data.csv")
 data['Capacity'] = pd.to_numeric(data['Capacity'])
 data['Year'] = pd.to_numeric(data['Year'])
-data_clean = data.dropna()
+data_clean = data
+# data_clean = data.dropna()
 
 # Remove fossil fuels from the data
 if green:
@@ -123,7 +124,7 @@ if green:
     plt.ylabel("Geodesic Wasserstein Capacity Variance")
     plt.title("Spatial variance Green")
     plt.locator_params(axis='x', nbins=5)
-    plt.savefig("Geodesic_variance_Capacity_green")
+    plt.savefig("Geodesic_variance_Capacity_green_full")
     plt.show()
 else:
     # Time-varying geodesic variance
@@ -132,5 +133,5 @@ else:
     plt.ylabel("Geodesic Wasserstein Capacity Variance")
     plt.title("Spatial variance Fossil")
     plt.locator_params(axis='x', nbins=5)
-    plt.savefig("Geodesic_variance_Capacity_fossil")
+    plt.savefig("Geodesic_variance_Capacity_fossil_full")
     plt.show()
