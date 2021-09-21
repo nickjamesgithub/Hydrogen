@@ -234,9 +234,9 @@ plants_oceania = np.nan_to_num(oceania_fossil_cum_plants/(oceania_green_cum_plan
 plants_south_america = np.nan_to_num(south_america_fossil_cum_plants/(south_america_green_cum_plants+south_america_fossil_cum_plants))
 plants_other_asia = np.nan_to_num(other_asia_fossil_cum_plants/(other_asia_green_cum_plants+other_asia_fossil_cum_plants))
 
-#todo fix the error with the 1's / 0's 
-# Cross Contextual Analysis
 consistency_norm_list = []
+plants_distance = []
+capacity_distance = []
 for i in range(len(plants_europe)):
     # Get plant numbers and capacity
     plants_t = np.array([plants_europe[i], plants_east_asia[i], plants_north_america[i], plants_oceania[i], plants_south_america[i], plants_other_asia[i]]).reshape(-1,1)
@@ -244,7 +244,9 @@ for i in range(len(plants_europe)):
 
     # Plants and capacity distance matrices
     plants_t_dist = manhattan_distances(plants_t, plants_t)
+    plants_distance.append(plants_t_dist) # Plants distance
     capacity_t_dist = manhattan_distances(capacity_t, capacity_t)
+    capacity_distance.append(capacity_t_dist) # Capacity distance
 
     # Convert to affinity matrices
     affinity_plants = 1 - plants_t_dist/np.max(plants_t_dist)
