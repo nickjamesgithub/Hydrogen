@@ -123,7 +123,6 @@ capacity_oceania = np.nan_to_num(oceania_fossil_cum_capacity/(oceania_green_cum_
 capacity_south_america = np.nan_to_num(south_america_fossil_cum_capacity/(south_america_green_cum_capacity+south_america_fossil_cum_capacity))
 capacity_other_asia = np.nan_to_num(other_asia_fossil_cum_capacity/(other_asia_green_cum_capacity+other_asia_fossil_cum_capacity))
 
-
 # Plants Country lists
 europe_fossil_list_plants = []
 europe_green_list_plants = []
