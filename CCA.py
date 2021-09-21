@@ -2,6 +2,7 @@ from scipy.spatial.distance import correlation
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.metrics.pairwise import euclidean_distances, manhattan_distances
 
 # Import Data
 data = pd.read_csv("/Users/tassjames/Desktop/carbon_credits_research/hydrogen_research/Hydrogen_data.csv")
@@ -233,10 +234,29 @@ plants_oceania = np.nan_to_num(oceania_fossil_cum_plants/(oceania_green_cum_plan
 plants_south_america = np.nan_to_num(south_america_fossil_cum_plants/(south_america_green_cum_plants+south_america_fossil_cum_plants))
 plants_other_asia = np.nan_to_num(other_asia_fossil_cum_plants/(other_asia_green_cum_plants+other_asia_fossil_cum_plants))
 
+#todo fix the error with the 1's / 0's 
 # Cross Contextual Analysis
+consistency_norm_list = []
 for i in range(len(plants_europe)):
     # Get plant numbers and capacity
-    plants_t = [plants_europe[i], plants_east_asia[i], plants_north_america[i], plants_oceania[i], plants_south_america[i], plants_other_asia[i]]
-    capacity_t = [capacity_europe[i], capacity_east_asia[i], capacity_north_america[i], capacity_oceania[i], capacity_south_america[i], capacity_other_asia[i]]
+    plants_t = np.array([plants_europe[i], plants_east_asia[i], plants_north_america[i], plants_oceania[i], plants_south_america[i], plants_other_asia[i]]).reshape(-1,1)
+    capacity_t = np.array([capacity_europe[i], capacity_east_asia[i], capacity_north_america[i], capacity_oceania[i], capacity_south_america[i], capacity_other_asia[i]]).reshape(-1,1)
 
-    block = 1
+    # Plants and capacity distance matrices
+    plants_t_dist = manhattan_distances(plants_t, plants_t)
+    capacity_t_dist = manhattan_distances(capacity_t, capacity_t)
+
+    # Convert to affinity matrices
+    affinity_plants = 1 - plants_t_dist/np.max(plants_t_dist)
+    affinity_capacity = 1 - capacity_t_dist / np.max(capacity_t_dist)
+
+    # Consistency matrix norm
+    consistency_norm = np.nan_to_num(np.sum(np.abs(affinity_plants - affinity_capacity)))
+    consistency_norm_list.append(consistency_norm)
+
+# Plot consistency matrix norm
+plt.plot(consistency_norm_list)
+plt.ylabel("Consistency matrix norm")
+plt.xlabel("Time")
+plt.savefig("CCA_capacity_plants")
+plt.show()
