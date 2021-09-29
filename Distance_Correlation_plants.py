@@ -10,7 +10,8 @@ def distance_correlation(a,b):
 data = pd.read_csv("/Users/tassjames/Desktop/carbon_credits_research/hydrogen_research/Hydrogen_data.csv")
 data['Capacity'] = pd.to_numeric(data['Capacity'])
 data['Year'] = pd.to_numeric(data['Year'])
-data_remove = data.dropna()
+data_remove = data
+# data_remove = data.dropna()
 
 # # Remove fossil fuels
 # data_remove = data_remove[data_remove.Tech != "Fossil"]
