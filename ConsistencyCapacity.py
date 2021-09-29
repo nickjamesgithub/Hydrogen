@@ -126,9 +126,9 @@ for i in range(len(green_cumulative)):
 
     # Plot
     plt.plot(years, fossil_percentage, label=names[i])
-    plt.title("Fossil:Green Capacity ratio")
-    plt.xlabel("Date")
-    plt.ylabel("Fossil:Green capacity ratio")
+    plt.title("Capacity")
+    plt.xlabel("Time")
+    plt.ylabel("Proportion of fossil capacity")
     plt.legend()
 plt.savefig("Fossil_green_ratio_capacity")
 plt.show()

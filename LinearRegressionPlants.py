@@ -11,10 +11,11 @@ def linear_model(x, a, b):
 data = pd.read_csv("/Users/tassjames/Desktop/carbon_credits_research/hydrogen_research/Hydrogen_data.csv")
 data['Capacity'] = pd.to_numeric(data['Capacity'])
 data['Year'] = pd.to_numeric(data['Year'])
-data_remove = data.dropna()
+data_remove = data
+# data_remove = data.dropna()
 
-# Remove fossil fuels
-data_remove = data_remove[data_remove.Tech != "Fossil"]
+# # Remove fossil fuels
+# data_remove = data_remove[data_remove.Tech != "Fossil"]
 
 # Generate grid of years
 years = np.linspace(2000, 2024, 25)
@@ -85,7 +86,7 @@ for i in range(len(cumulative_plants)):
     # Plot linear regression estimate
     plt.scatter(years, data, label="Cumulative plants", color='black', alpha=0.5)
     plt.plot(years, linear_model(years_grid, *pars), label="Linear estimate", color='blue', linestyle='-')
-    plt.xlabel("Date")
+    plt.xlabel("Time")
     plt.ylabel("Number of plants")
     plt.title(name)
     plt.legend()

@@ -5,7 +5,7 @@ from pyemd import emd, emd_with_flow
 from math import radians, cos, sin, asin, sqrt
 import matplotlib.pyplot as plt
 
-green = False
+green = True
 
 # Read in dataset
 data = pd.read_csv("/Users/tassjames/Desktop/carbon_credits_research/hydrogen_research/Hydrogen_data.csv")
@@ -112,8 +112,8 @@ if green:
     # Time-varying geodesic variance
     plt.plot(years_grid, geodesic_variance)
     plt.xlabel("Time")
-    plt.ylabel("Geodesic Wasserstein Plants Variance")
-    plt.title("Spatial variance Green")
+    plt.ylabel("Geodesic variance of plants")
+    plt.title("Green plants")
     plt.locator_params(axis='x', nbins=5)
     plt.savefig("Geodesic_variance_Plants_green_full")
     plt.show()
@@ -121,8 +121,8 @@ else:
     # Time-varying geodesic variance
     plt.plot(years_grid, geodesic_variance)
     plt.xlabel("Time")
-    plt.ylabel("Geodesic Wasserstein Plants Variance")
-    plt.title("Spatial variance Fossil")
+    plt.ylabel("Geodesic variance of plants")
+    plt.title("All plants")
     plt.locator_params(axis='x', nbins=5)
     plt.savefig("Geodesic_variance_Plants_fossil_full")
     plt.show()
