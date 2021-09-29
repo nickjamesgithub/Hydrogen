@@ -256,8 +256,10 @@ for i in range(len(plants_europe)):
     consistency_norm_list.append(consistency_norm)
 
 # Plot consistency matrix norm
-plt.plot(consistency_norm_list)
+years_grid = np.linspace(2000,2025, len(consistency_norm_list))
+plt.plot(years_grid, consistency_norm_list)
 plt.ylabel("Consistency matrix norm")
 plt.xlabel("Time")
+plt.title("Time-varying consistency")
 plt.savefig("CCA_capacity_plants")
 plt.show()

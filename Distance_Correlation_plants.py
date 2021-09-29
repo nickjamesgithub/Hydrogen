@@ -89,25 +89,29 @@ for i in range(5, len(years)):
     distance_correlation_other_asia_usa_plants.append(dist_corr_usa_other_asia)
 
 # plot of distance correlation
-year_grid_plot = np.linspace(2005, 2024, len(distance_correlation_usa_europe_plants))
+year_grid_plot = np.linspace(2005, 2025, len(distance_correlation_usa_europe_plants)).astype("int64")
 
 # Plot USA/Europe
-plt.plot(year_grid_plot, distance_correlation_usa_europe_plants)
-plt.ylabel("Distance correlation")
+fig, ax = plt.subplots()
+ax.plot(year_grid_plot, distance_correlation_usa_europe_plants)
+plt.ylabel("Rolling distance correlation")
 plt.xlabel("Time")
+ax.xaxis.set_major_locator(plt.MaxNLocator(5))
+plt.title("North America - Europe")
+plt.savefig("DCORR_USA_Europe")
 plt.show()
 
-# Plot USA/East Asia
-plt.plot(year_grid_plot, distance_correlation_other_asia_europe_plants)
-plt.ylabel("Distance correlation")
-plt.xlabel("Time")
-plt.show()
-
-# Plot Europe/East Asia
-plt.plot(year_grid_plot, distance_correlation_other_asia_usa_plants)
-plt.ylabel("Distance correlation")
-plt.xlabel("Time")
-plt.show()
+# # Plot USA/East Asia
+# plt.plot(year_grid_plot, distance_correlation_other_asia_europe_plants)
+# plt.ylabel("Distance correlation")
+# plt.xlabel("Time")
+# plt.show()
+#
+# # Plot Europe/East Asia
+# plt.plot(year_grid_plot, distance_correlation_other_asia_usa_plants)
+# plt.ylabel("Distance correlation")
+# plt.xlabel("Time")
+# plt.show()
 
 
 
