@@ -12,8 +12,8 @@ data['Capacity'] = pd.to_numeric(data['Capacity'])
 data['Year'] = pd.to_numeric(data['Year'])
 data_remove = data.dropna()
 
-# Remove fossil fuels
-data_remove = data_remove[data_remove.Tech != "Fossil"]
+# # Remove fossil fuels
+# data_remove = data_remove[data_remove.Tech != "Fossil"]
 
 # Generate grid of years
 years = np.linspace(2000, 2024, 25)
@@ -67,29 +67,47 @@ plt.show()
 # List of cumulative counts for continents
 cumulative_capacity_regions = np.array([europe_cum, east_asia_cum, north_america_cum, oceania_cum, south_america_cum, other_asia_cum])
 
-distance_correlation_plants = np.zeros((len(cumulative_capacity_regions), len(cumulative_capacity_regions)))
-for i in range(len(cumulative_capacity_regions)):
-    for j in range(len(cumulative_capacity_regions)):
-        ts_i = cumulative_capacity_regions[i]
-        ts_j = cumulative_capacity_regions[j]
-        dist_corr = dcor.distance_correlation(ts_i,ts_j)
-        distance_correlation_plants[i,j] = dist_corr
+distance_correlation_usa_europe_plants = [] # USA/Europe
+distance_correlation_other_asia_europe_plants = [] # Other Asia/Europe
+distance_correlation_other_asia_usa_plants = [] # Other Asia/USA
+
+for i in range(5, len(years)):
+    europe_slice = europe_cum[i-5:i]
+    usa_slice = north_america_cum[i-5:i]
+    other_asia_slice = other_asia_cum[i - 5:i]
+
+    # DCORR USA/Europe
+    dist_corr_usa_europe = dcor.distance_correlation(europe_slice,usa_slice)
+    distance_correlation_usa_europe_plants.append(dist_corr_usa_europe)
+
+    # DCORR Europe/Other Asia
+    dist_corr_europe_other_asia = dcor.distance_correlation(europe_slice, other_asia_slice)
+    distance_correlation_other_asia_europe_plants.append(dist_corr_europe_other_asia)
+
+    # DCORR USA/Other Asia
+    dist_corr_usa_other_asia = dcor.distance_correlation(usa_slice, other_asia_slice)
+    distance_correlation_other_asia_usa_plants.append(dist_corr_usa_other_asia)
 
 # plot of distance correlation
-plt.matshow(distance_correlation_plants)
-plt.colorbar()
-plt.savefig("DCORR_Plants")
+year_grid_plot = np.linspace(2005, 2024, len(distance_correlation_usa_europe_plants))
+
+# Plot USA/Europe
+plt.plot(year_grid_plot, distance_correlation_usa_europe_plants)
+plt.ylabel("Distance correlation")
+plt.xlabel("Time")
 plt.show()
 
-# Distance correlation
-print("Distance correlation matrix", distance_correlation_plants)
-print("Median distance correlation value", np.median(distance_correlation_plants))
+# Plot USA/East Asia
+plt.plot(year_grid_plot, distance_correlation_other_asia_europe_plants)
+plt.ylabel("Distance correlation")
+plt.xlabel("Time")
+plt.show()
 
-# Compute total distance correlation plants
-names = ["Europe", "East Asia", "North America", "Oceania", "South America", "Other Asia"]
-for i in range(len(distance_correlation_plants)):
-    total_dist_correl = np.sum(distance_correlation_plants[i])
-    print(names[i], total_dist_correl)
+# Plot Europe/East Asia
+plt.plot(year_grid_plot, distance_correlation_other_asia_usa_plants)
+plt.ylabel("Distance correlation")
+plt.xlabel("Time")
+plt.show()
 
 
 
